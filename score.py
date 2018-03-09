@@ -53,11 +53,12 @@ def compute_score(file_in, file_out):
     Compute score (with bonus) of submission
     :param file_in: input file
     :param file_out: output file (solution)
-    :return: score
+    :return: raw_score, bonus_score where total_score = raw_score + bonus_score
     """
     (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(file_in)
     vehicles_rides = parse_output(file_out)
-    score = 0
+    raw_score = 0
+    bonus_score = 0
     for vehicle, vehicle_rides in enumerate(vehicles_rides):
         position = (0, 0)
         step = 0
@@ -66,15 +67,15 @@ def compute_score(file_in, file_out):
             step_min = ride[4]
             step_max = ride[5]
             if step + distance_to_start(position, ride) + ride_distance(ride) <= step_max:
-                score += ride_distance(ride)
+                raw_score += ride_distance(ride)
                 if step + distance_to_start(position, ride) <= step_min:  # bonus
-                    score += bonus
+                    bonus_score += bonus
                 step_departure = max(step + distance_to_start(position, ride), step_min)
                 step = step_departure + ride_distance(ride)
                 position = (ride[2], ride[3])
             else:
                 logging.error("invalid ride")
-    return score
+    return raw_score, bonus_score
 
 
 def set_log_level(args):
@@ -89,9 +90,14 @@ def main():
     parser.add_argument('file_in', type=str, help='file_in')
     parser.add_argument('file_out', type=str, help='file_out')
     parser.add_argument('--debug', action='store_true', help='for debug purpose')
+    parser.add_argument('--score', action='store_true', help='display raw score and bonus score')
     args = parser.parse_args()
     set_log_level(args)
-    print("score: {0:,}".format(compute_score(args.file_in, args.file_out)))  # decimal separator
+    (raw_score, bonus_score) = compute_score(args.file_in, args.file_out)
+    if args.score:
+        print("score: {0:,} = {1:,} + {2:,} (bonus)".format(raw_score + bonus_score, raw_score, bonus_score))  # decimal separator
+    else:
+        print("score: {0:,}".format(raw_score + bonus_score))  # decimal separator
 
 
 if __name__ == '__main__':
