@@ -8,7 +8,7 @@ i.e. we obtained the same scores with `score.py` as those given by the official 
 
 ## Usage
 
-`python3 score.py a_example.in a_example.out`
+`python3 score.py res/a_example.in res/a_example.out`
 
 ```
 INFO:root:parsing rides
@@ -19,7 +19,7 @@ INFO:root:parsing a_example.out
 score: 10
 ```
 
-`python3 score.py b_should_be_easy.in b_should_be_easy.out`
+`python3 score.py res/b_should_be_easy.in res/b_should_be_easy.out`
 
 ```
 INFO:root:parsing rides
@@ -30,7 +30,7 @@ INFO:root:parsing b_should_be_easy.out
 score: 176,877
 ```
 
-`./score.py b_should_be_easy.in b_should_be_easy.out --score`
+`python3 score.py res/b_should_be_easy.in res/b_should_be_easy.out --score`
 
 ```
 INFO:root:parsing rides
