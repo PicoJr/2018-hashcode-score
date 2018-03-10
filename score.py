@@ -47,6 +47,20 @@ def parse_output(file_out):
             vehicles_rides.append(rides[1:])  # rides[0] == number of rides
     return vehicles_rides
 
+def eval_ride(ride, step, position, bonus):
+    raw_score, bonus_score = 0, 0
+    step_min, step_max = ride[4], ride[5]
+    step_departure = max(step + distance_to_start(position, ride), step_min)
+    new_step = step_departure + ride_distance(ride)
+    new_position = (ride[2], ride[3])
+    if step + distance_to_start(position, ride) + ride_distance(ride) <= step_max:
+        raw_score = ride_distance(ride)
+        if step + distance_to_start(position, ride) <= step_min:  # bonus
+            bonus_score = bonus
+    else:
+        logging.error("invalid ride")
+    return (raw_score, bonus_score, new_step, new_position)
+
 
 def compute_score(file_in, file_out):
     """
@@ -57,24 +71,17 @@ def compute_score(file_in, file_out):
     """
     (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(file_in)
     vehicles_rides = parse_output(file_out)
-    raw_score = 0
-    bonus_score = 0
+    raw_score, bonus_score = 0, 0
     for vehicle, vehicle_rides in enumerate(vehicles_rides):
         position = (0, 0)
         step = 0
         for rid in vehicle_rides:
             ride = rides_list[rid]
-            step_min = ride[4]
-            step_max = ride[5]
-            if step + distance_to_start(position, ride) + ride_distance(ride) <= step_max:
-                raw_score += ride_distance(ride)
-                if step + distance_to_start(position, ride) <= step_min:  # bonus
-                    bonus_score += bonus
-                step_departure = max(step + distance_to_start(position, ride), step_min)
-                step = step_departure + ride_distance(ride)
-                position = (ride[2], ride[3])
-            else:
-                logging.error("invalid ride")
+            (ride_raw_score, ride_bonus_score, new_step, new_position) = eval_ride(ride, step, position, bonus)
+            raw_score += ride_raw_score
+            bonus_score += ride_bonus_score
+            step = new_step
+            position = new_position
     return raw_score, bonus_score
 
 
