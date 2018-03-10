@@ -1,4 +1,4 @@
-# Hash Code 2018 Score
+# Hash Code 2018 Score Calculator
 
 **TL;DR** Compute score for Hash Code 2018 Qualification Round.
 
@@ -45,14 +45,32 @@ score: 176,877 = 169,677 + 7,200 (bonus)
 
 see `test_score.py`
 
-### TODO
+## Output File Checks
+
+The following checks are performed on the output file when the `--check` option is set
 
 check
-- [ ] ride ids are correct
+- [x] ride ids are correct
 - [x] rides are assigned only once
 - [x] number of cars
 - [x] number of steps in the simulation
 - [x] simulation with unit tests
+
+### Example
+
+`./score.py res/b_should_be_easy.in res/b_should_be_easy.out --check`
+
+```
+INFO:root:parsing rides
+INFO:root:opening res/b_should_be_easy.in
+INFO:root:800 1000 100 300 25 25000
+INFO:root:done parsing rides
+INFO:root:parsing res/b_should_be_easy.out
+INFO:root:checking vehicles
+INFO:root:vehicles: OK
+INFO:root:checking ride ids
+INFO:root:ride ids: OK
+```
 
 ## Our Team & Qualification Round
 

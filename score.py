@@ -26,23 +26,28 @@ def check_vehicles(expected, value):
     return value == expected
 
 
-def check_ride_ids(vehicles_rides):
+def check_ride_ids(vehicles_rides, rides):
     """
     Check ride ids are assigned at most once
     :param vehicles_rides: vr[i] == ride list of vehicle i
+    :param rides: number of rides as specified by input file
     :return: True if ride ids assigned at most once else False
     """
     rids_assigned = set()
     assigned_at_most_once = True
+    valid_range = True
     logging.info("checking ride ids")
-    for rids in vehicles_rides:
+    for vehicle, rids in enumerate(vehicles_rides):
         for rid in rids:
+            if rid < 0 or rid >= rides:
+                logging.warning("line {}: invalid rid {} < 0 or >= {}".format(vehicle, rid, rides))
+                valid_range = False
             if rid in rids_assigned:
                 logging.warning("rid {} was assigned more than once".format(rid))
                 assigned_at_most_once = False
             else:
                 rids_assigned.add(rid)
-    return assigned_at_most_once
+    return assigned_at_most_once and valid_range
 
 
 def parse_input(file_in):
@@ -113,8 +118,10 @@ def compute_score(file_in, file_out, check=False):
     (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(file_in)
     vehicles_rides = parse_output(file_out)
     if check:
-        check_vehicles(vehicles, len(vehicles_rides))
-        check_ride_ids(vehicles_rides)
+        if check_vehicles(vehicles, len(vehicles_rides)):
+            logging.info("vehicles: OK")
+        if check_ride_ids(vehicles_rides, rides):
+            logging.info("ride ids: OK")
     raw_score, bonus_score = 0, 0
     for vehicle, vehicle_rides in enumerate(vehicles_rides):
         position = (0, 0)

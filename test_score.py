@@ -1,5 +1,6 @@
 #! /usr/bin/python3
 
+import logging
 import unittest
 
 from score import check_vehicles, check_ride_ids
@@ -7,6 +8,7 @@ from score import compute_score, eval_ride
 from score import parse_input, parse_output
 
 res_folder = 'res/'
+logging.basicConfig(level=logging.ERROR)  # disables warnings
 
 
 class TestScore(unittest.TestCase):
@@ -80,13 +82,24 @@ class TestScore(unittest.TestCase):
         self.assertTrue(check_vehicles(vehicles, len(vehicles_rides)))
 
     def test_valid_rids_a(self):
+        (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(res_folder + "a_example.in")
         vehicles_rides = parse_output(res_folder + "a_example.out")
-        self.assertTrue(check_ride_ids(vehicles_rides))
+        self.assertTrue(check_ride_ids(vehicles_rides, rides))
 
     def test_valid_rids_b(self):
+        (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(res_folder + "b_should_be_easy.in")
         vehicles_rides = parse_output(res_folder + "b_should_be_easy.out")
-        self.assertTrue(check_ride_ids(vehicles_rides))
+        self.assertTrue(check_ride_ids(vehicles_rides, rides))
 
+    def test_invalid_rids_range(self):
+        rides = 10
+        vehicles_rides = [[1, 2, 3], [12]]
+        self.assertFalse(check_ride_ids(vehicles_rides, rides))
+
+    def test_invalid_rids_assigned_more_than_once(self):
+        rides = 10
+        vehicles_rides = [[1, 2, 3], [2, 8]]
+        self.assertFalse(check_ride_ids(vehicles_rides, rides))
 
 if __name__ == '__main__':
     unittest.main()
