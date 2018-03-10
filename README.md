@@ -30,16 +30,28 @@ INFO:root:parsing b_should_be_easy.out
 score: 176,877
 ```
 
+`./score.py b_should_be_easy.in b_should_be_easy.out --score`
+
+```
+INFO:root:parsing rides
+INFO:root:opening b_should_be_easy.in
+INFO:root:800 1000 100 300 25 25000
+INFO:root:done parsing rides
+INFO:root:parsing b_should_be_easy.out
+score: 176,877 = 169,677 + 7,200 (bonus)
+```
+
 ## Checks
 
-Please note that `score.py` runs very few sanity checks:
+Please note that `score.py` runs very few sanity checks.
 
-it does **not** check:
+### TODO
 
-* ride ids are correct
-* rides are assigned only once
-* number of cars
-* number of steps in the simulation
+check
+- [ ] ride ids are correct
+- [ ] rides are assigned only once
+- [ ] number of cars
+- [ ] number of steps in the simulation
 
 ## Our Team & Qualification Round
 
