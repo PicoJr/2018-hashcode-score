@@ -51,7 +51,8 @@ check
 - [ ] ride ids are correct
 - [ ] rides are assigned only once
 - [ ] number of cars
-- [ ] number of steps in the simulation
+- [x] number of steps in the simulation
+- [x] simulation with unit tests
 
 ## Our Team & Qualification Round
 

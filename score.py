@@ -47,18 +47,16 @@ def parse_output(file_out):
             vehicles_rides.append(rides[1:])  # rides[0] == number of rides
     return vehicles_rides
 
-def eval_ride(ride, step, position, bonus):
+def eval_ride(ride, step, position, bonus, steps):
     raw_score, bonus_score = 0, 0
     step_min, step_max = ride[4], ride[5]
     step_departure = max(step + distance_to_start(position, ride), step_min)
-    new_step = step_departure + ride_distance(ride)
+    new_step = step_departure + ride_distance(ride)  # arrival
     new_position = (ride[2], ride[3])
-    if step + distance_to_start(position, ride) + ride_distance(ride) <= step_max:
+    if  new_step <= step_max and new_step <= steps:
         raw_score = ride_distance(ride)
         if step + distance_to_start(position, ride) <= step_min:  # bonus
             bonus_score = bonus
-    else:
-        logging.error("invalid ride")
     return (raw_score, bonus_score, new_step, new_position)
 
 
@@ -77,7 +75,9 @@ def compute_score(file_in, file_out):
         step = 0
         for rid in vehicle_rides:
             ride = rides_list[rid]
-            (ride_raw_score, ride_bonus_score, new_step, new_position) = eval_ride(ride, step, position, bonus)
+            (ride_raw_score, ride_bonus_score, new_step, new_position) = eval_ride(ride, step, position, bonus, steps)
+            if ride_raw_score == 0:
+                logging.warning("ride {} arrived late".format(rid))
             raw_score += ride_raw_score
             bonus_score += ride_bonus_score
             step = new_step
