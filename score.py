@@ -3,6 +3,7 @@
 import argparse
 import logging
 
+
 def distance_to_start(position, ride):
     return abs(position[0] - ride[0]) + abs(position[1] - ride[1])
 
@@ -11,12 +12,25 @@ def ride_distance(ride):
     (x1, y1, x2, y2) = ride[0:4]
     return abs(x2 - x1) + abs(y2 - y1)
 
+
 def check_vehicles(expected, value):
+    """
+    Check number of vehicles found in output file matches input specifications
+    :param expected: number of cars as specified by input file
+    :param value: number of cars found in output file
+    :return: None
+    """
     logging.info("checking vehicles")
     if value != expected:
-        logging.warning("some cars are missing from output file")
+        logging.warning("found {} cars in output file, expected {}".format(value, expected))
+
 
 def check_ride_ids(vehicles_rides):
+    """
+    Check ride ids are assigned at most once
+    :param vehicles_rides: vr[i] == ride list of vehicle i
+    :return: None
+    """
     rids_assigned = set()
     logging.info("checking ride ids")
     for rids in vehicles_rides:
@@ -25,6 +39,7 @@ def check_ride_ids(vehicles_rides):
                 logging.warning("rid {} was assigned more than once".format(rid))
             else:
                 rids_assigned.add(rid)
+
 
 def parse_input(file_in):
     """
@@ -61,17 +76,26 @@ def parse_output(file_out):
             vehicles_rides.append(rides[1:])  # rides[0] == number of rides
     return vehicles_rides
 
+
 def eval_ride(ride, step, position, bonus, steps):
+    """
+    :param ride: (x1, y1, x2, y2, step_start, step_end)
+    :param step: current simulation step
+    :param position: current vehicle position
+    :param bonus: bonus points as specified by input file
+    :param steps: simulation duration as specified by input file
+    :return: raw_score, bonus_score, new_step, new_position where total_score = raw_score + bonus_score
+    """
     raw_score, bonus_score = 0, 0
     step_min, step_max = ride[4], ride[5]
     step_departure = max(step + distance_to_start(position, ride), step_min)
     new_step = step_departure + ride_distance(ride)  # arrival
     new_position = (ride[2], ride[3])
-    if  new_step <= step_max and new_step <= steps:
+    if new_step <= step_max and new_step <= steps:
         raw_score = ride_distance(ride)
         if step + distance_to_start(position, ride) <= step_min:  # bonus
             bonus_score = bonus
-    return (raw_score, bonus_score, new_step, new_position)
+    return raw_score, bonus_score, new_step, new_position
 
 
 def compute_score(file_in, file_out, check=False):
@@ -102,9 +126,11 @@ def compute_score(file_in, file_out, check=False):
             position = new_position
     return raw_score, bonus_score
 
-def display_score(raw_score, bonus_score, args):
-    if args.score:
-        print("score: {0:,} = {1:,} + {2:,} (bonus)".format(raw_score + bonus_score, raw_score, bonus_score))  # decimal separator
+
+def display_score(raw_score, bonus_score, display_raw_and_bonus=False):
+    if display_raw_and_bonus:
+        print("score: {0:,} = {1:,} + {2:,} (bonus)".format(raw_score + bonus_score, raw_score,
+                                                            bonus_score))  # decimal separator
     else:
         print("score: {0:,}".format(raw_score + bonus_score))  # decimal separator
 
@@ -126,7 +152,7 @@ def main():
     args = parser.parse_args()
     set_log_level(args)
     (raw_score, bonus_score) = compute_score(args.file_in, args.file_out, args.check)
-    display_score(raw_score, bonus_score, args)
+    display_score(raw_score, bonus_score, args.score)
 
 
 if __name__ == '__main__':
