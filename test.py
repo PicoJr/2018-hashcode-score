@@ -1,18 +1,23 @@
 #! /usr/bin/python3
 
 import unittest
+
+from score import check_vehicles, check_ride_ids
 from score import compute_score, eval_ride
+from score import parse_input, parse_output
+
+res_folder = 'res/'
 
 
 class TestScore(unittest.TestCase):
-
     def test_score_a_example(self):
-        (raw_score, bonus_score) = compute_score("res/a_example.in", "res/a_example.out")
+        (raw_score, bonus_score) = compute_score(res_folder + "a_example.in", res_folder + "a_example.out")
         self.assertEqual(raw_score, 8)
         self.assertEqual(bonus_score, 2)
 
     def test_score_b_should_be_easy(self):
-        (raw_score, bonus_score) = compute_score("res/b_should_be_easy.in", "res/b_should_be_easy.out")
+        (raw_score, bonus_score) = compute_score(res_folder + "b_should_be_easy.in",
+                                                 res_folder + "b_should_be_easy.out")
         self.assertEqual(raw_score, 169677)
         self.assertEqual(bonus_score, 7200)
 
@@ -26,7 +31,7 @@ class TestScore(unittest.TestCase):
         self.assertEqual(ride_raw_score, 10)
         self.assertEqual(ride_bonus_score, 42)
         self.assertEqual(new_step, 22)
-        self.assertEqual(new_position, (0,20))
+        self.assertEqual(new_position, (0, 20))
 
     def test_possible_ride_without_bonus(self):
         ride = (0, 10, 0, 20, 8, 24)
@@ -38,7 +43,7 @@ class TestScore(unittest.TestCase):
         self.assertEqual(ride_raw_score, 10)
         self.assertEqual(ride_bonus_score, 0)
         self.assertEqual(new_step, 20)
-        self.assertEqual(new_position, (0,20))
+        self.assertEqual(new_position, (0, 20))
 
     def test_impossible_ride(self):
         ride = (0, 10, 0, 20, 6, 18)
@@ -50,7 +55,7 @@ class TestScore(unittest.TestCase):
         self.assertEqual(ride_raw_score, 0)
         self.assertEqual(ride_bonus_score, 0)
         self.assertEqual(new_step, 20)
-        self.assertEqual(new_position, (0,20))
+        self.assertEqual(new_position, (0, 20))
 
     def test_impossible_ride_simulation_step(self):
         ride = (0, 4, 0, 20, 2, 22)
@@ -62,7 +67,26 @@ class TestScore(unittest.TestCase):
         self.assertEqual(ride_raw_score, 0)
         self.assertEqual(ride_bonus_score, 0)
         self.assertEqual(new_step, 20)
-        self.assertEqual(new_position, (0,20))
+        self.assertEqual(new_position, (0, 20))
+
+    def test_valid_vehicles_a(self):
+        (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(res_folder + "a_example.in")
+        vehicles_rides = parse_output(res_folder + "a_example.out")
+        self.assertTrue(check_vehicles(vehicles, len(vehicles_rides)))
+
+    def test_valid_vehicles_b(self):
+        (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(res_folder + "b_should_be_easy.in")
+        vehicles_rides = parse_output(res_folder + "b_should_be_easy.out")
+        self.assertTrue(check_vehicles(vehicles, len(vehicles_rides)))
+
+    def test_valid_rids_a(self):
+        vehicles_rides = parse_output(res_folder + "a_example.out")
+        self.assertTrue(check_ride_ids(vehicles_rides))
+
+    def test_valid_rids_b(self):
+        vehicles_rides = parse_output(res_folder + "b_should_be_easy.out")
+        self.assertTrue(check_ride_ids(vehicles_rides))
+
 
 if __name__ == '__main__':
     unittest.main()

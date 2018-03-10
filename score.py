@@ -18,27 +18,31 @@ def check_vehicles(expected, value):
     Check number of vehicles found in output file matches input specifications
     :param expected: number of cars as specified by input file
     :param value: number of cars found in output file
-    :return: None
+    :return: value == expected
     """
     logging.info("checking vehicles")
     if value != expected:
         logging.warning("found {} cars in output file, expected {}".format(value, expected))
+    return value == expected
 
 
 def check_ride_ids(vehicles_rides):
     """
     Check ride ids are assigned at most once
     :param vehicles_rides: vr[i] == ride list of vehicle i
-    :return: None
+    :return: True if ride ids assigned at most once else False
     """
     rids_assigned = set()
+    assigned_at_most_once = True
     logging.info("checking ride ids")
     for rids in vehicles_rides:
         for rid in rids:
             if rid in rids_assigned:
                 logging.warning("rid {} was assigned more than once".format(rid))
+                assigned_at_most_once = False
             else:
                 rids_assigned.add(rid)
+    return assigned_at_most_once
 
 
 def parse_input(file_in):
@@ -143,9 +147,10 @@ def set_log_level(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='print score')
-    parser.add_argument('file_in', type=str, help='file_in')
-    parser.add_argument('file_out', type=str, help='file_out')
+    parser = argparse.ArgumentParser(description='print score',
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('file_in', type=str, help='input file e.g. a_example.in')
+    parser.add_argument('file_out', type=str, help='output file e.g. a_example.out')
     parser.add_argument('--debug', action='store_true', help='for debug purpose')
     parser.add_argument('--score', action='store_true', help='display raw score and bonus score')
     parser.add_argument('--check', action='store_true', help='check output (slower)')

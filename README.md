@@ -41,9 +41,9 @@ INFO:root:parsing b_should_be_easy.out
 score: 176,877 = 169,677 + 7,200 (bonus)
 ```
 
-## Checks
+## Unit Tests
 
-Please note that `score.py` runs very few sanity checks.
+see `test.py`
 
 ### TODO
 
