@@ -43,7 +43,7 @@ score: 176,877 = 169,677 + 7,200 (bonus)
 
 ## Unit Tests
 
-see `test.py`
+see `test_score.py`
 
 ### TODO
 
