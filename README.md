@@ -49,8 +49,8 @@ Please note that `score.py` runs very few sanity checks.
 
 check
 - [ ] ride ids are correct
-- [ ] rides are assigned only once
-- [ ] number of cars
+- [x] rides are assigned only once
+- [x] number of cars
 - [x] number of steps in the simulation
 - [x] simulation with unit tests
 

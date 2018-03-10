@@ -11,6 +11,20 @@ def ride_distance(ride):
     (x1, y1, x2, y2) = ride[0:4]
     return abs(x2 - x1) + abs(y2 - y1)
 
+def check_vehicles(expected, value):
+    logging.info("checking vehicles")
+    if value != expected:
+        logging.warning("some cars are missing from output file")
+
+def check_ride_ids(vehicles_rides):
+    rids_assigned = set()
+    logging.info("checking ride ids")
+    for rids in vehicles_rides:
+        for rid in rids:
+            if rid in rids_assigned:
+                logging.warning("rid {} was assigned more than once".format(rid))
+            else:
+                rids_assigned.add(rid)
 
 def parse_input(file_in):
     """
@@ -60,15 +74,19 @@ def eval_ride(ride, step, position, bonus, steps):
     return (raw_score, bonus_score, new_step, new_position)
 
 
-def compute_score(file_in, file_out):
+def compute_score(file_in, file_out, check=False):
     """
     Compute score (with bonus) of submission
     :param file_in: input file
     :param file_out: output file (solution)
+    :param check: if True checks cars number and ride ids uniqueness (slower)
     :return: raw_score, bonus_score where total_score = raw_score + bonus_score
     """
     (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(file_in)
     vehicles_rides = parse_output(file_out)
+    if check:
+        check_vehicles(vehicles, len(vehicles_rides))
+        check_ride_ids(vehicles_rides)
     raw_score, bonus_score = 0, 0
     for vehicle, vehicle_rides in enumerate(vehicles_rides):
         position = (0, 0)
@@ -84,6 +102,12 @@ def compute_score(file_in, file_out):
             position = new_position
     return raw_score, bonus_score
 
+def display_score(raw_score, bonus_score, args):
+    if args.score:
+        print("score: {0:,} = {1:,} + {2:,} (bonus)".format(raw_score + bonus_score, raw_score, bonus_score))  # decimal separator
+    else:
+        print("score: {0:,}".format(raw_score + bonus_score))  # decimal separator
+
 
 def set_log_level(args):
     if args.debug:
@@ -98,13 +122,11 @@ def main():
     parser.add_argument('file_out', type=str, help='file_out')
     parser.add_argument('--debug', action='store_true', help='for debug purpose')
     parser.add_argument('--score', action='store_true', help='display raw score and bonus score')
+    parser.add_argument('--check', action='store_true', help='check output (slower)')
     args = parser.parse_args()
     set_log_level(args)
-    (raw_score, bonus_score) = compute_score(args.file_in, args.file_out)
-    if args.score:
-        print("score: {0:,} = {1:,} + {2:,} (bonus)".format(raw_score + bonus_score, raw_score, bonus_score))  # decimal separator
-    else:
-        print("score: {0:,}".format(raw_score + bonus_score))  # decimal separator
+    (raw_score, bonus_score) = compute_score(args.file_in, args.file_out, args.check)
+    display_score(raw_score, bonus_score, args)
 
 
 if __name__ == '__main__':
