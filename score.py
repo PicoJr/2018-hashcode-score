@@ -188,9 +188,7 @@ def compute_score(file_in, file_out, check=False):
         car = Car()
         for rid in vehicle_rides:
             ride = rides_list[rid]
-            completed_in_time = eval_ride(car, ride, score, bonus, steps)
-            if not completed_in_time:
-                logging.warning("ride {} arrived late".format(rid))
+            eval_ride(car, ride, score, bonus, steps)
     score.unassigned = rides - score.taken
     return score
 
