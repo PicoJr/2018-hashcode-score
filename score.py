@@ -184,7 +184,7 @@ def compute_score(file_in, file_out, check=False):
         if check_ride_ids(vehicles_rides, rides):
             logging.info("ride ids: OK")
     score = Score()
-    for vehicle, vehicle_rides in enumerate(vehicles_rides):
+    for vehicle_rides in vehicles_rides:
         car = Car()
         for rid in vehicle_rides:
             ride = rides_list[rid]
