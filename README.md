@@ -1,5 +1,7 @@
 # Hash Code 2018 Score Calculator
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c7b68e6d417b43c48d66f76b6d02dc7f)](https://app.codacy.com/app/PicoJr/2018-hashcode-score?utm_source=github.com&utm_medium=referral&utm_content=PicoJr/2018-hashcode-score&utm_campaign=Badge_Grade_Dashboard)
+
 **TL;DR** Compute score for Hash Code 2018 Qualification Round.
 
 ## Usage
