@@ -20,7 +20,7 @@ score: 176,877 = 169,677 + 7,200 (bonus)
 
 `python3 score.py res/e_high_bonus.in res/e_high_bonus.out --score --rides --wait `
 
-```
+``` text
 score: 21,465,945 = 11,588,945 + 9,877,000 (bonus)
 wait time: 2,032,526
 rides: 10,000 = 9,984 (taken) + 16 (unassigned) 0 (late)
@@ -32,16 +32,16 @@ rides: 9,984 (taken) = 9,877 (bonus) + 107 (no bonus)
 The following checks are performed on the output file when the `--check` option is set
 
 check
-- [x] ride ids are correct
-- [x] rides are assigned only once
-- [x] number of cars
-- [x] number of steps in the simulation
+-   [x] ride ids are correct
+-   [x] rides are assigned only once
+-   [x] number of cars
+-   [x] number of steps in the simulation
 
 ### Example
 
 `python3 score.py res/b_should_be_easy.in res/b_should_be_easy.out --check`
 
-```
+``` text
 INFO:root:checking vehicles
 INFO:root:vehicles: OK
 INFO:root:checking ride ids

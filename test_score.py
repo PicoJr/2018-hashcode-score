@@ -8,19 +8,19 @@ from score import check_vehicles, check_ride_ids
 from score import compute_score, eval_ride
 from score import parse_input, parse_output
 
-res_folder = 'res/'
+RES_FOLDER = 'res/'
 logging.basicConfig(level=logging.ERROR)  # disables warnings
 
 
 class TestScore(unittest.TestCase):
     def test_score_a_example(self):
-        score = compute_score(res_folder + "a_example.in", res_folder + "a_example.out")
+        score = compute_score(RES_FOLDER + "a_example.in", RES_FOLDER + "a_example.out")
         self.assertEqual(score.raw_score, 8)
         self.assertEqual(score.bonus_score, 2)
 
     def test_score_b_should_be_easy(self):
-        score = compute_score(res_folder + "b_should_be_easy.in",
-                              res_folder + "b_should_be_easy.out")
+        score = compute_score(RES_FOLDER + "b_should_be_easy.in",
+                              RES_FOLDER + "b_should_be_easy.out")
         self.assertEqual(score.raw_score, 169677)
         self.assertEqual(score.bonus_score, 7200)
 
@@ -85,23 +85,25 @@ class TestScore(unittest.TestCase):
         self.assertEqual(car.y, 20)
 
     def test_valid_vehicles_a(self):
-        (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(res_folder + "a_example.in")
-        vehicles_rides = parse_output(res_folder + "a_example.out")
+        (_rides_list, _rows, _columns, vehicles, _rides, _bonus, _steps) = parse_input(RES_FOLDER + "a_example.in")
+        vehicles_rides = parse_output(RES_FOLDER + "a_example.out")
         self.assertTrue(check_vehicles(vehicles, len(vehicles_rides)))
 
     def test_valid_vehicles_b(self):
-        (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(res_folder + "b_should_be_easy.in")
-        vehicles_rides = parse_output(res_folder + "b_should_be_easy.out")
+        (_rides_list, _rows, _columns, vehicles, _rides, _bonus, _steps) = parse_input(
+            RES_FOLDER + "b_should_be_easy.in")
+        vehicles_rides = parse_output(RES_FOLDER + "b_should_be_easy.out")
         self.assertTrue(check_vehicles(vehicles, len(vehicles_rides)))
 
     def test_valid_rids_a(self):
-        (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(res_folder + "a_example.in")
-        vehicles_rides = parse_output(res_folder + "a_example.out")
+        (_rides_list, _rows, _columns, _vehicles, rides, _bonus, _steps) = parse_input(RES_FOLDER + "a_example.in")
+        vehicles_rides = parse_output(RES_FOLDER + "a_example.out")
         self.assertTrue(check_ride_ids(vehicles_rides, rides))
 
     def test_valid_rids_b(self):
-        (rides_list, rows, columns, vehicles, rides, bonus, steps) = parse_input(res_folder + "b_should_be_easy.in")
-        vehicles_rides = parse_output(res_folder + "b_should_be_easy.out")
+        (_rides_list, _rows, _columns, _vehicles, rides, _bonus, _steps) = parse_input(
+            RES_FOLDER + "b_should_be_easy.in")
+        vehicles_rides = parse_output(RES_FOLDER + "b_should_be_easy.out")
         self.assertTrue(check_ride_ids(vehicles_rides, rides))
 
     def test_invalid_rids_range(self):
